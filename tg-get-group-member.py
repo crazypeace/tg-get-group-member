@@ -33,9 +33,15 @@ async def main():
         if isinstance(m.participant, ChannelParticipantBanned):
             print(f"跳过Exceptions列表中的用户 ID: {m.id}") # 可选的调试信息
             continue
+        
+        # 获取加入时间（如果有）
+        joined_at = getattr(m.participant, 'date', None)
+        joined_at_str = joined_at.isoformat() if joined_at else None
+        
         data[m.id] = {
             'username': m.username or '',
-            'full_name': f"{m.first_name or ''} {m.last_name or ''}".strip()
+            'full_name': f"{m.first_name or ''} {m.last_name or ''}".strip(),
+            'joined_at': joined_at_str
         }
 
     yaml_text = yaml.dump(data, allow_unicode=True, sort_keys=False)
