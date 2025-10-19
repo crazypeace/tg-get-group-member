@@ -44,7 +44,15 @@ async def main():
             'joined_at': joined_at_str
         }
 
-    yaml_text = yaml.dump(data, allow_unicode=True, sort_keys=False)
+    # 按joined_at排序 再保存到文件
+    sorted_data = dict(
+        sorted(
+            data.items(),
+            key=lambda item: (item[1]['joined_at'] is None, item[1]['joined_at'])
+        )
+    )
+        
+    yaml_text = yaml.dump(sorted_data, allow_unicode=True, sort_keys=False)
 
     # 输出到命令行
     print("\n--- 群组成员列表 ---")
